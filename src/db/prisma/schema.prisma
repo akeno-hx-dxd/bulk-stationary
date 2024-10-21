@@ -17,10 +17,11 @@ model Product {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
   name            String    @unique
   uri             String[]
-  label           String 
-  description     String
+  unit            String
+  description     String[]
   quantity        Int[]
   price           Float[]
+  exTag           String
 }
 
 //Suggestion (testamonials, reviews)

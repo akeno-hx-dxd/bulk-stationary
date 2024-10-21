@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import Prisma from "../../../../db/index";
-import { isAuthenticated } from "@/app/middleware/auth";
 
 export const GET = async (request: NextRequest,{ params }: { params: { pid: string}}) => {
     try{
@@ -19,14 +18,10 @@ export const GET = async (request: NextRequest,{ params }: { params: { pid: stri
     }   
 }
 export const POST = async (request: NextRequest,{ params }: { params: { pid: string}}) => {
-    const isAuthResponse = isAuthenticated(request);
-    if(isAuthResponse){
-        return isAuthResponse
-    }
     try{
         const { pid } = params;
-        const { name, uri, label, description, quantity, price} = await request.json();
-        if(!pid || !name || !uri || !label || !description || !quantity || !price){
+        const { name, uri, exTag, description, quantity, price, unit} = await request.json();
+        if(!pid || !name || !uri || !exTag || !description || !quantity || !price || !unit){
             return NextResponse.json({ success: false, error: "Incomplete data Provided"}, { status: 400 })
         }
         const product = await Prisma.product.update({
@@ -34,10 +29,11 @@ export const POST = async (request: NextRequest,{ params }: { params: { pid: str
             data: {
                 name: name,
                 uri: uri,
-                label: label,
+                exTag: exTag,
                 description: description,
                 quantity: quantity,
-                price: price
+                price: price,
+                unit: unit
             }
         })
         if(!product){
@@ -51,10 +47,6 @@ export const POST = async (request: NextRequest,{ params }: { params: { pid: str
 }
     
 export const DELETE = async (request: NextRequest, { params }: { params: { pid: string}}) => {
-    const isAuthResponse = isAuthenticated(request);
-    if(isAuthResponse){
-        return isAuthResponse
-    }
     try{
         const { pid } = params;
         if(!pid){
