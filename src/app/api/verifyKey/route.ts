@@ -4,22 +4,38 @@ import "dotenv/config";
 export const POST = async (request: NextRequest) => {
   try {
     const { key } = await request.json();
+
+    // Validate the key
     if (!key || key !== process.env.ADMIN_KEY) {
       return NextResponse.json(
         { success: false, error: "Invalid auth key" },
-        { status: 403 } 
+        { status: 403 }
       );
     }
 
-    return NextResponse.json(
-      { success: true, token: process.env.ADMIN_KEY }, 
+    // Create the response
+    const response = NextResponse.json(
+      { success: true },
       { status: 200 }
     );
+
+    // Set the token as a cookie
+    response.cookies.set({
+      name: "auth-key",
+      value: process.env.ADMIN_KEY || "",
+      path: "/",
+      httpOnly: true, // HTTP-only for better security
+      secure: process.env.NODE_ENV === "production", // Only set the cookie over HTTPS in production
+      sameSite: "strict", // CSRF protection
+      maxAge: 60 * 60 * 24 * 39, // Cookie expires in 7 days
+    });
+
+    return response;
   } catch (error) {
     console.error("Error processing request:", error);
     return NextResponse.json(
       { success: false, error: "An error occurred while processing your request." },
-      { status: 500 } 
+      { status: 500 }
     );
   }
 };

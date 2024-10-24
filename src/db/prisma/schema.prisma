@@ -18,9 +18,9 @@ model Product {
   name            String    @unique
   uri             String[]
   unit            String
-  description     String[]
-  quantity        Int[]
-  price           Float[]
+  descriptions    String[]
+  quantities       Int[]
+  prices           Float[]
   exTag           String
 }
 

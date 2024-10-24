@@ -1,12 +1,12 @@
 import { CarouselDemo } from "./Carousel";
 import { Button } from "./ui/button";
-
+import { EditDeleteButton } from "./loggedIn";
 export type Product = {
   id: string;
   name: string;
-  description: string[]; // Update type to string array
-  quantity: number[];
-  price: number[];
+  descriptions: string[]; // Update type to string array
+  quantities: number[];
+  prices: number[];
   uri: string[];
   unit: string;
   exTag: string;
@@ -31,7 +31,7 @@ export const ProductCard = ({ product, index }: { product: Product; index: numbe
 
       {/* Render description as bullet points */}
       <ul className="text-gray-600 text-md lg:text-base break-words my-4 mx-2">
-        {product.description.map((point, idx) => (
+        {product.descriptions.map((point, idx) => (
           <li key={idx} className="list-disc list-inside">{point}</li>
         ))}
       </ul>
@@ -40,30 +40,16 @@ export const ProductCard = ({ product, index }: { product: Product; index: numbe
         <Button className="w-full">Quantity - Price</Button>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2">
           {
-            Array.from({ length: product.quantity.length }).map((_, index) => (
+            Array.from({ length: product.quantities.length }).map((_, index) => (
               <Button key={index} className="bg-blue-500 hover:bg-blue-700 text-white">
-                {product.quantity[index]} {product.unit} - &#x20B9; {product.price[index]}
+                {product.quantities[index]} {product.unit} - &#x20B9; {product.prices[index]}
               </Button>
             ))
           }
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-4">
-        <Button className="bg-red-500 hover:bg-red-500 text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M16 9v10H8V9zm-1.5-6h-5l-1 1H5v2h14V4h-3.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2z"/>
-          </svg>
-          <span>Delete</span>
-        </Button>
-        <Button className="bg-green-500 hover:bg-green-500 text-white">
-          <span>Edit</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-            <path fill="currentColor" d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"/>
-            <path fill="currentColor" d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"/>
-          </svg>
-        </Button>
-      </div>
+      <EditDeleteButton id={product.id}/>
     </div>
   );
 };

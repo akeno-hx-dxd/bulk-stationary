@@ -14,34 +14,34 @@ export const GET = async () => {
 }
 
 export const POST = async (request: NextRequest) => {
-    try{
-        const { name, uri, exTag, description, quantity, price, unit} = await request.json();
-        if(!name || !uri || !exTag || !description || !quantity || !price || !unit){
+    try {
+        const { name, uri, exTag, descriptions, quantities, prices, unit } = await request.json();
+        
+        // Check for incomplete data
+        if (!name || !uri || !exTag || !descriptions || !quantities || !prices || !unit) {
             throw new Error("Incomplete data");
         }
+
+        // Create the product
         const product = await Prisma.product.create({
             data: {
-                name: name,
-                uri: uri,
-                exTag: exTag,
-                description: description,
-                quantity: quantity,
-                price: price,
-                unit: unit
+                name,
+                uri,
+                exTag,
+                descriptions, // Use descriptions array
+                quantities,    // Use quantities array
+                prices,        // Use prices array
+                unit
             }
-        })
-        if(!product){
-            return NextResponse.json({ success: false, error: "Failed to create product"}, { status: 400 })
-        }
-        else
-        {
+        });
+
+        if (!product) {
+            return NextResponse.json({ success: false, error: "Failed to create product" }, { status: 400 });
+        } else {
             const products = await Prisma.product.findMany();
-            return NextResponse.json({ success: true, products: products })
-        }   
-    }
-    catch(err : any){
-        return NextResponse.json({ success: false, error: err.message}, { status: 500 })
+            return NextResponse.json({ success: true, products: products }, { status: 200 });
+        }
+    } catch (err: any) {
+        return NextResponse.json({ success: false, error: err.message }, { status: 500 });
     }
 }
-
-
