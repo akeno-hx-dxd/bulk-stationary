@@ -32,17 +32,16 @@ export default function Products () {
     return (
         <>
         {
-            products.length === 0 && (
+            products.length === 0 ? (
               <div className="w-full h-96 flex flex-col justify-center items-center">
                 <p className="text-lg">No products found</p>
                 <p className="text-lg">Please add products</p>
               </div>
+            ):(
+              products.map((product: Product, index) => (
+                  <ProductCard key={product.id} product={product} index={index+1}/>
+              ))
             )
-        }
-        {
-            products.map((product: Product, index) => (
-                <ProductCard key={product.id} product={product} index={index+1}/>
-            ))
         }
         </>
     )

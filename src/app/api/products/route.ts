@@ -22,6 +22,9 @@ export const POST = async (request: NextRequest) => {
             throw new Error("Incomplete data");
         }
 
+        //parse the data into specific formats
+        const parsedQuantities = quantities.map((quant: string) => parseInt(quant));
+        const parsedPrices = prices.map((price: string) => parseFloat(price));
         // Create the product
         const product = await Prisma.product.create({
             data: {
@@ -29,8 +32,8 @@ export const POST = async (request: NextRequest) => {
                 uri,
                 exTag,
                 descriptions, // Use descriptions array
-                quantities,    // Use quantities array
-                prices,        // Use prices array
+                quantities: parsedQuantities,    // Use quantities array
+                prices: parsedPrices,        // Use prices array
                 unit
             }
         });

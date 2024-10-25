@@ -8,9 +8,9 @@ import { useParams } from 'next/navigation';
 export default function EditProduct() {
   const [name, setName] = useState('');
   const [unit, setUnit] = useState('');
-  const [descriptions, setDescriptions] = useState<string[]>(['']); // Separate descriptions array
-  const [quantities, setQuantities] = useState<number[]>([0]);
-  const [prices, setPrices] = useState<number[]>([0]);
+  const [descriptions, setDescriptions] = useState<string[]>(['']); 
+  const [quantities, setQuantities] = useState<string[]>(['0']);
+  const [prices, setPrices] = useState<string[]>(['']);
   const [exTag, setExTag] = useState('');
   const [imageUris, setImageUris] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -36,8 +36,8 @@ export default function EditProduct() {
         setName(name);
         setUnit(unit);
         setDescriptions(descriptions);
-        setQuantities(quantities);
-        setPrices(prices);
+        setQuantities(quantities.map((quant: number)=> String(quant)));
+        setPrices(prices.map((price: number)=> String(price)));
         setExTag(exTag);
         setImageUris(uri);
       } else {
@@ -56,12 +56,19 @@ export default function EditProduct() {
       setLoading(false);
       return;
     }
+    for(let i = 0; i < quantities.length; i++) {
+      if(prices[i] == '0' || quantities[i] == '0') {
+        alert("quantity and price cannot be empty");
+        setLoading(false);
+        return;
+      }
+    }
 
     const productData = {
       id,
       name,
       unit,
-      descriptions, // Use descriptions array
+      descriptions, 
       quantities,
       prices,
       exTag,
@@ -86,8 +93,8 @@ export default function EditProduct() {
 
   // Function to add new quantity and price fields
   const addQuantityAndPrice = () => {
-    setQuantities([...quantities, 0]); // Add default quantity
-    setPrices([...prices, 0]); // Add default price
+    setQuantities([...quantities, '0']); // Add default quantity
+    setPrices([...prices, '']); // Add default price
   };
 
   // Function to remove quantity and price field at a given index
@@ -190,46 +197,71 @@ export default function EditProduct() {
           <Button className='h-10 w-full shadow-md'>Close</Button>
         </div>
 
-        {/* Dynamic Quantity and Price Inputs */}
         {quantities.map((quantity, index) => (
           <div key={index} className="grid grid-cols-3 gap-2">
-            <input
-              type="text" // Change type to text to prevent clearing
-              placeholder="Quantity"
-              value={quantity}
-              onInput={(e) => {
-                const value = e.currentTarget.value;
-                // Allow only numbers and one period
-                if (/^\d*\.?\d*$/.test(value)) {
-                  const updatedQuantities = [...quantities];
-                  updatedQuantities[index] = value ? Number(value) : 0; // Default to 0 if empty
-                  setQuantities(updatedQuantities);
-                }
-              }}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
-              min="0" // Prevent negative input
+        <span className="flex items-center">
+          <button
+            type="button"
+            onClick={() => {
+              const updatedQuantities = [...quantities];
+              updatedQuantities[index] = String(Math.max(0, (parseInt(quantity) || 0) - 1)); // Decrement, but not below 0
+              setQuantities(updatedQuantities);
+            }}
+            className="px-4 py-2 bg-red-600 text-black rounded-l-lg border border-red-600 focus:outline-none hover:bg-red-600 transition"
+          >
+          -
+          </button>
+          <input
+            type="text"
+            placeholder="Quantity"
+            value={quantity}
+            onChange={(e) => {
+              const value = e.currentTarget.value;
+              const quantityRegex = /^[0-9]$/;
+              if (quantityRegex.test(value)) {
+                const updatedQuantities = [...quantities];
+                updatedQuantities[index] = value || '';
+                setQuantities(updatedQuantities);
+              }
+            }}
+            className="w-full px-1 py-2 text-center border-t border-b rounded-none border-gray-300 focus:outline-none  focus:ring-blue-400 transition duration-300"
+            min="0" 
             />
+
+            <button
+            type="button"
+            onClick={() => {
+              const updatedQuantities = [...quantities];
+              updatedQuantities[index] = String((parseInt(quantity) || 0) + 1); // Increment
+              setQuantities(updatedQuantities);
+              }}
+            className="px-4 py-2 bg-green-600 text-black rounded-r-lg border border-green-600 focus:outline-none hover:bg-green-600 transition"
+            >
+              + 
+            </button>
+            </span>
             <input
-              type="text" // Change type to text to prevent clearing
+              type="text" 
               placeholder="Price"
               value={prices[index]}
-              onInput={(e) => {
+              onChange={(e) => {
                 const value = e.currentTarget.value;
-                // Allow only numbers and one period
-                if (/^\d*\.?\d*$/.test(value)) {
+                const priceRegex = /^\d*\.?\d*$/;
+                if (priceRegex.test(value)) {
                   const updatedPrices = [...prices];
-                  updatedPrices[index] = value ? Number(value) : 0; // Default to 0 if empty
+                  updatedPrices[index] = value ? value : ''; 
                   setPrices(updatedPrices);
                 }
               }}
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
-              min="0" // Prevent negative input
+              min="0" 
             />
             <button type="button" onClick={() => removeQuantityAndPrice(index)} className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300">
               Remove
             </button>
           </div>
         ))}
+
 
         <button
           type="button"

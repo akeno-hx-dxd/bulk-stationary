@@ -34,7 +34,8 @@ export const POST = async (request: NextRequest, { params }: { params: { pid: st
     if (!existingProduct) {
       return NextResponse.json({ success: false, error: "Invalid product ID" }, { status: 400 });
     }
-
+    const parsedQuantities = quantities.map((quant: string) => parseInt(quant));
+    const parsedPrices = prices.map((price: string) => parseFloat(price));  
     // If the URI is changing, delete the old image from Cloudinary
     await compareAndDeleteImages(existingProduct.uri, uri);
 
@@ -46,8 +47,8 @@ export const POST = async (request: NextRequest, { params }: { params: { pid: st
         uri,
         exTag,
         descriptions,
-        quantities,
-        prices,
+        quantities: parsedQuantities,
+        prices: parsedPrices,
         unit,
       },
     });

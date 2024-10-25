@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Ramesh Paper Agency",
-  description: "Bulk stationary printing agency and wholesaler",
+  title: "Bulk Stationary",
+  description: "Bulk stationary printing agency and wholesaler, based in india at bangalore jaynagar",
 };
 
 export default function RootLayout({

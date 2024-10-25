@@ -14,7 +14,7 @@ export type Product = {
 
 export const ProductCard = ({ product, index }: { product: Product; index: number }) => {
   return (
-    <div className="flex flex-col justify-center items-center w-full px-4 py-4 bg-white rounded-lg shadow-md h-auto lg:h-96 border border-gray-200"> 
+    <div className="flex flex-col justify-center items-center w-full px-4 py-4 bg-white rounded-lg shadow-md h-auto border border-gray-200"> 
       <div className="mb-4 flex flex-row justify-center items-center gap-4">
         <p className="break-all text-lg">{index}. {product.name}</p>
         <span className="text-green-500">
@@ -36,13 +36,13 @@ export const ProductCard = ({ product, index }: { product: Product; index: numbe
         ))}
       </ul>
 
-      <div className="flex flex-col lg:flex-row justify-center items-center w-full space-y-2 lg:space-y-0">
+      <div className="flex flex-col justify-center items-center w-full space-y-2">
         <Button className="w-full">Quantity - Price</Button>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2">
           {
             Array.from({ length: product.quantities.length }).map((_, index) => (
               <Button key={index} className="bg-blue-500 hover:bg-blue-700 text-white">
-                {product.quantities[index]} {product.unit} - &#x20B9; {product.prices[index]}
+                {product.quantities[index]} {product.unit} - &#x20B9; {new Intl.NumberFormat('en-IN').format(product.prices[index])}
               </Button>
             ))
           }

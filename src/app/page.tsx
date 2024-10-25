@@ -17,12 +17,12 @@ export default function Page() {
             <LoginButton />
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-4">
           <Products />
         </div>
       </main>
 
-      <footer className="flex justify-center items-center w-full h-16 text-gray-600 bg-[#f5f1e6] mt-8">
+      <footer className="flex justify-center items-center w-full h-16 text-gray-600 bg-[#f5f1e6]">
         <p className="text-sm">© 2023 Ramesh Paper Agency. All rights reserved.</p>
       </footer>
     </div>
