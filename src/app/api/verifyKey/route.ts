@@ -27,7 +27,7 @@ export const POST = async (request: NextRequest) => {
       httpOnly: true, // HTTP-only for better security
       secure: process.env.NODE_ENV === "production", // Only set the cookie over HTTPS in production
       sameSite: "strict", // CSRF protection
-      maxAge: 60 * 60 * 24 * 39, // Cookie expires in 7 days
+      maxAge: 60 * 60 * 24 * 39, // Cookie expires in 39 days
     });
 
     return response;

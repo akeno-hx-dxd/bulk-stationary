@@ -1,30 +1,58 @@
-import { Navbar } from "@/components/navbar";
-import { Button } from "@/components/ui/button";
-import Products from "@/components/Products";
-import { LoginButton, AddProductButton } from "@/components/loggedIn";
+import FlashBar from "@/components/FlashBar";
+import DesktopHeader from "@/components/desktop/DesktopHeader";
+import BannerCarousel from "@/components/BannerCarousel";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import AppSidebar from "@/components/mobile/AppSideBar";
+import { Heart, Search, SearchIcon, ShoppingCartIcon } from "lucide-react";
+import Catalogs from "@/components/Catalogs";
 export default function Page() {
   return (
-    <div className="flex flex-col justify-between w-full min-h-screen bg-[#f9f9f9]">
-      <header className="sticky top-0 flex justify-center items-center w-full h-16 bg-[#f5f1e6] shadow-md z-20">
-        <Navbar />
-      </header>
-
-      <main className="flex flex-col w-full h-full p-4 bg-white shadow-md">
-        <div className="text-2xl font-bold text-center mb-2 uppercase flex flex-col justify-around items-center gap-4">
-          <Button className="bg-teal-500 w-4/6">Products</Button>
-          <div className="w-full">
-            <AddProductButton />
-            <LoginButton />
+    <div className="flex flex-col min-h-screen">
+        <div className="w-screen flex justify-center items-center bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-black">
+          <FlashBar />
+        </div>
+        {/* desktop header  */}
+        <div className="hidden lg:grid lg:p-1">
+          <DesktopHeader />
+        </div>
+        <div className="grid lg:hidden p-1">
+          <div>
+          <AppSidebar />
+          <div className="flex justify-between items-center pr-2">
+          <div className="flex justify-start items-center gap-4">
+            <SidebarTrigger />
+            <SearchIcon className="w-4 h-4"/>
+          </div>
+          <div>
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+              Bulk stationary
+            </span>
+          </div>
+          <div className="flex justify-end items-center gap-4">
+            <Heart className="w-4 h-4"/>
+            <ShoppingCartIcon className="w-4 h-4"/>
+          </div>
+          </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-4">
-          <Products />
-        </div>
-      </main>
-
-      <footer className="flex justify-center items-center w-full h-16 text-gray-600 bg-[#f5f1e6]">
-        <p className="text-sm">© 2023 Ramesh Paper Agency. All rights reserved.</p>
-      </footer>
-    </div>
+      <div className="mt-2">
+        <BannerCarousel images={['cld-sample', 'cld-sample-2', 'cld-sample-3']}/>
+      </div>
+      <div className="mt-2 flex justify-center items-center p-4">
+        <Catalogs />
+      </div>
+      <div>
+        {/* Dummy cards 2 */}
+      </div>
+      <div>
+        {/* trending products carousel */}
+      </div>
+      <div>
+        {/* Dummy card */ }
+      </div>
+      <div>
+        {/* footer */}
+      </div>
+    </div> 
   );
 }

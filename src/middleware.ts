@@ -29,6 +29,7 @@ function isAuthRoute(request: NextRequest): boolean {
   const authRoutes = [
     { path: '/api/products', methods: ['POST'] },
     { path: '/api/products/[pid]', methods: ['POST', 'DELETE'] },
+    { path: '/api/groups', methods: ['POST', 'PATCH'] },
   ];
 
   return authRoutes.some(route => 

@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { SidebarProvider} from "@/components/ui/sidebar";
 import "./globals.css";
+import {
+  WEBSITE_NAME,
+  WEBSITE_DESCRIPTION,
+} from "@/constants/index";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -14,8 +19,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Bulk Stationary",
-  description: "Bulk stationary printing agency and wholesaler, based in india at bangalore jaynagar",
+  title: WEBSITE_NAME,
+  description: WEBSITE_DESCRIPTION,
 };
 
 export default function RootLayout({
@@ -28,9 +33,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="flex justify-center border w-full h-fit bg-[#edece8] text-[#7E23CF]">
+        <SidebarProvider>
+        <div className="flex flex-col justify-center items-center min-h-screen w-full bg-white text-black">
           {children}
         </div>
+        </SidebarProvider>
       </body>
     </html>
   );
