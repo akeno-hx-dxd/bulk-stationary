@@ -35,10 +35,12 @@ const ProductPage = () => {
       <div className='w-screen flex justify-center items-center'>
         <CarouselCustom uris={product.image_uris} />
       </div>
-      <div className='flex justify-center items-center px-4 mb-4 mt-4 gap-2'>
+      <div className='flex justify-around items-center px-4 mb-4 mt-4 gap-2'>
         <h1 className="text-xl font-bold">{product.name}</h1>
+        <div className='flex gap-4'>
         <EditButton id={product.id}/>
         <DeleteButton id={product.id}/>
+        </div>
       </div>
       <div className='w-screen flex justify-start items-center px-4'>
       <span className='mx-2 font-bold text-lg text-blue-800'>
@@ -77,7 +79,7 @@ const ProductPage = () => {
           [Description]
         </span>
         <div className='mx-2 grid grid-cols-1 gap-2 list-decimal mb-2'>
-          {product.descriptions.map((description, index) => (
+          {product.descriptions.map((description, _) => (
             <li className='text-md'>
               {description}
             </li>

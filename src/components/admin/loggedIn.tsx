@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { DeleteIcon, EditIcon, PlusIcon} from "lucide-react";
+import { Trash2Icon, PenIcon, PlusIcon} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { DropdownMenuItem } from "../ui/dropdown-menu";
 export const LoginButton = () => {
@@ -60,7 +60,7 @@ export const EditButton = ({ id }: {id: string}) => {
             {isLoggedIn ? (
                <div className="">
                 <Link href={`/product/edit/${id}`}>
-                    <EditIcon />     
+                    <PenIcon className="text-emerald-600"/>     
                 </Link>
              </div>
             ) : (
@@ -111,7 +111,7 @@ export const DeleteButton = ({ id }: { id: string }) => {
                     </span>
                         
                 ) : (   
-                    <DeleteIcon onClick={handleDelete} style={{ cursor: 'pointer' }} />
+                    <Trash2Icon onClick={handleDelete} style={{ cursor: 'pointer' }} className="text-red-600"/>
                 )
             )}
         </>

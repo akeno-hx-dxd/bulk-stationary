@@ -14,7 +14,7 @@ const TrendingProducts = () => {
       if (res.ok) {
         const data = await res.json();
         const trendingGroup = data.groups.find(
-          (group: { name: string }) => group.name === "Trending"
+          (group: { name: string }) => group.name === "Trending Products"
         );
         if (trendingGroup) {
           setTrendingProducts(

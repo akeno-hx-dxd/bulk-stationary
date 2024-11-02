@@ -6,7 +6,7 @@ import AppSidebar from "@/components/mobile/AppSideBar";
 import { SearchIcon, ShoppingCartIcon } from "lucide-react";
 import Catalogs from "@/components/Catalogs";
 import CsImage from "@/components/CsImage";
-import TrendingProductsCarousel from "@/components/TrendingProductsCarousel";
+import TrendingCarousel from "@/components/TrendingCarousel";
 import { AddProductIcon } from "@/components/admin/loggedIn";
 export default function Page() {
   return (
@@ -56,7 +56,7 @@ export default function Page() {
       <div className="w-screen flex flex-col justify-center items-center">
         <h1 className="text-xl font-semibold">Trending Products</h1>
         <div className="m-4 rounded-md">
-          <TrendingProductsCarousel />
+          <TrendingCarousel />
         </div>
       </div>
       <div className="w-screen flex justify-center items-center">

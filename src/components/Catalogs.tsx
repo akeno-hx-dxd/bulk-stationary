@@ -22,7 +22,7 @@ const Catalogs = () => {
     <div className="grid grid-cols-3 lg:grid-cols-6 gap-4 lg:w-screen p-2">
       {catalogs.map((catalog) => (
         <Link
-          href={`/catalogs/${catalog.id}`}
+          href={`/catalog/${catalog.id}`}
           key={catalog.id}
           className="flex flex-col items-center text-center transition-transform duration-300 hover:scale-105"
         >
