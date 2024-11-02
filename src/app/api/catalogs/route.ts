@@ -57,33 +57,3 @@ export const POST = async (request: NextRequest) => {
     }
 };
 
-// PATCH request to update an existing catalog
-export const PATCH = async (request: NextRequest) => {
-    try {
-        const { catalogId, name, imageUri, productIds } = await request.json();
-
-        if (!catalogId || (!name && !imageUri && !productIds)) {
-            return NextResponse.json({ success: false, error: "Incomplete data" }, { status: 400 });
-        }
-
-        const updatedCatalog = await Prisma.catalog.update({
-            where: { id: catalogId },
-            data: {
-                ...(name && { name }),
-                ...(imageUri && { image_uri: imageUri }),
-                ...(productIds && {
-                    catalogProducts: {
-                        set: [], // Remove existing products
-                        create: productIds.map((productId: string) => ({
-                            product: { connect: { id: productId } }
-                        }))
-                    }
-                })
-            }
-        });
-
-        return NextResponse.json({ success: true, catalog: updatedCatalog }, { status: 200 });
-    } catch (err: any) {
-        return NextResponse.json({ success: false, error: err.message }, { status: 500 });
-    }
-};
