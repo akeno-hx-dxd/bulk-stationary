@@ -43,7 +43,7 @@ const Page = () => {
           Loading...
         </div>  
       ) : (
-        <div className="flex justify-center items-center flex-col gap-4 px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {catalog?.catalogProducts.map((cp) => (
             <ProductCard product={cp.product} key={cp.product.id}/>
           ))}
@@ -51,7 +51,7 @@ const Page = () => {
       )}
 
       {/* Footer */}
-      <div className="w-screen flex justify-center items-center bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-black text-xs h-8 p-2 opacity-90">
+      <div className="w-screen flex bottom-0 justify-center items-center bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-black text-xs h-8 p-2 opacity-90">
         © 2024 Bulk Stationery, All Rights Reserved.
       </div>
     </div>
