@@ -4,7 +4,7 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 
 // Helper to get the largest width and height
 
-export function CarouselDemo({ uris }: { uris: string[] }) {
+export default function CarouselCustom ({ uris }: { uris: string[] }) {
   return (
     <Carousel className="w-full max-w-xs" uriLength={uris.length}>
       <CarouselContent>

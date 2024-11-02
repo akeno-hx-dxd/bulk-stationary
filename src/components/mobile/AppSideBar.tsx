@@ -21,11 +21,20 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import {
-  Calendar, Home, Inbox, Search, Settings, ChevronDown, Building2Icon, User2, ChevronUp, HomeIcon, ShoppingCartIcon, ScrollTextIcon,
+ Settings, 
+ ChevronDown, 
+ Building2Icon, 
+ ChevronUp, 
+ BadgePlusIcon,
+ ShoppingCartIcon,
+ TrendingUp,
+ Scissors,
+ School,
+ DrumIcon
 } from "lucide-react"
 import Link from "next/link"
 import { Group } from "@/lib/types"
-
+import {CatalogAndGroupEditButton} from "../admin/loggedIn"
 export default function AppSidebar() {
   const [groups, setGroups] = useState<Group[]>([])
   const [brands, setBrands] = useState<string[]>([])
@@ -64,9 +73,6 @@ export default function AppSidebar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
                 <DropdownMenuItem>
-                  <ScrollTextIcon /> Wish-List
-                </DropdownMenuItem>
-                <DropdownMenuItem>
                   <ShoppingCartIcon /> Current-Cart
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -78,32 +84,42 @@ export default function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {groups.map((group) =>
-                group.name === "Shop by Brands" ? (
-                  <DropdownMenu key={group.id}>
+            <DropdownMenu key={"brands"}>
                     <DropdownMenuTrigger asChild>
-                      <SidebarMenuButton>
-                        <Building2Icon />
-                        {group.name}
-                        <ChevronDown className="ml-auto" />
-                      </SidebarMenuButton>
+                    <SidebarMenuButton>
+                      <Building2Icon />
+                      Shop by Brand
+                      <ChevronDown className="ml-auto" />
+                    </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-[--radix-popper-anchor-width] grid grid-cols-3">
-                      {brands.map((brand: string) => (
-                        <DropdownMenuItem key={brand}>
-                          <Link href={`/brand/${brand}`} className="text-[10px] border-b">
-                            {brand}
-                          </Link>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
+                    {brands.map((brand: string) => (
+                      <DropdownMenuItem key={brand}>
+                        <Link href={`/brand/${brand}`} className="text-[10px] border-b">
+                          {brand}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
                   </DropdownMenu>
-                ) : (
+              {groups.map((group) =>(
                   <Collapsible key={group.id} defaultOpen={true} className="group/collapsible">
                     <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
                         <SidebarMenuButton>
-                          <HomeIcon />
+                        {
+                          group.name === "Trending Products" || group.name === "Trending" ? (
+                            <TrendingUp />
+                          ) : group.name === "Best Selling Products" ? (
+                            <DrumIcon />
+                          ) : group.name === "Craft Products" || group.name === "Craft Supplies" || group.name === "Craft Essentials" ? (
+                            <Scissors />
+                          ) : group.name === "School Products" || group.name === "School Essentials" ? (
+                            <School />
+                          ) : (
+                            <BadgePlusIcon />
+                          )
+                        }
                           <span>{group.name}</span>
                           <ChevronDown className="ml-auto" />
                         </SidebarMenuButton>
@@ -112,7 +128,7 @@ export default function AppSidebar() {
                         <SidebarMenuSub>
                           {group.groupProducts.map(({ product }) => (
                             <SidebarMenuSubItem key={product.id}>
-                              <Link href={`/product/${product.id}`} className="text-[10px] border-b">
+                              <Link href={`/product/view/${product.id}`} className="text-[10px] border-b">
                                 {product.name}
                               </Link>
                             </SidebarMenuSubItem>
@@ -121,8 +137,7 @@ export default function AppSidebar() {
                       </CollapsibleContent>
                     </SidebarMenuItem>
                   </Collapsible>
-                )
-              )}
+                ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -133,20 +148,19 @@ export default function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> Username
+                  <Settings/> Settings
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
                 <DropdownMenuItem>
-                  <span>Account</span>
+                  <span>
+                    <Link href={"/login"}>
+                      Admin Login
+                    </Link>
+                  </span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Billing</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Sign out</span>
-                </DropdownMenuItem>
+                <CatalogAndGroupEditButton />
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>

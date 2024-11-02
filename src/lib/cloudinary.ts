@@ -22,7 +22,7 @@ const extractPublicId = (secureUrl: string): string => {
     return match[1]; // The public ID including folder structure
   } else {
     console.error(`Unable to extract public ID from URL: ${secureUrl}`);
-    return ''; // Return an empty string if unable to extract
+    return secureUrl; 
   }
 };
 

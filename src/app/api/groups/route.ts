@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Prisma from "../../../db/index";
 
+
 // Get all groups with products included
 export const GET = async () => {
     try {
@@ -70,55 +71,3 @@ export const POST = async (request: NextRequest) => {
     }
 };
 
-// Update an existing group
-export const PATCH = async (request: NextRequest) => {
-    try {
-        const { groupId, name, addProductIds, removeProductIds } = await request.json();
-
-        if (!groupId) {
-            return NextResponse.json(
-                { success: false, error: "Group ID is required for updating" },
-                { status: 400 }
-            );
-        }
-
-        const updateData: any = {};
-        if (name) updateData.name = name;
-
-        if (addProductIds) {
-            updateData.groupProducts = {
-                create: addProductIds.map((productId: string) => ({
-                    product: { connect: { id: productId } },
-                })),
-            };
-        }
-
-        if (removeProductIds) {
-            updateData.groupProducts = {
-                deleteMany: removeProductIds.map((productId: string) => ({
-                    productId,
-                    groupId,
-                })),
-            };
-        }
-
-        const updatedGroup = await Prisma.group.update({
-            where: { id: groupId },
-            data: updateData,
-            include: {
-                groupProducts: {
-                    include: {
-                        product: true,
-                    },
-                },
-            },
-        });
-
-        return NextResponse.json({ success: true, group: updatedGroup }, { status: 200 });
-    } catch (err: any) {
-        return NextResponse.json(
-            { success: false, error: err.message || "Failed to update group" },
-            { status: 500 }
-        );
-    }
-};

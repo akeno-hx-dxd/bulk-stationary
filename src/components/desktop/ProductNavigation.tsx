@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
+import { Product } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
@@ -18,25 +18,12 @@ import CsImage from "@/components/CsImage"; // Import CsImage
 
 export default function ProductNavigationMenu() {
   const [groups, setGroups] = useState<Group[]>([]);
-  const [brands, setBrands] = useState<string[]>([]);
-
   useEffect(() => {
     const fetchGroups = async () => {
       const res = await fetch("/api/groups");
       if (res.ok) {
         const parsedRes = await res.json();
         setGroups(parsedRes.groups);
-
-        // Collect unique brands
-        let brandsCollection: string[] = [];
-        parsedRes.groups.forEach((group: Group) => {
-          group.groupProducts.forEach(({ product }) => {
-            brandsCollection.push(product.brand);
-          });
-        });
-
-        // Use Set to remove duplicates, then set brands
-        setBrands(Array.from(new Set(brandsCollection)));
       } else {
         console.error("Failed to fetch groups");
       }
@@ -53,54 +40,43 @@ export default function ProductNavigationMenu() {
               {group.name}
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              {group.name === "Shop by Brands" ? (
-                <ul className="grid grid-cols-6 w-[600px] gap-1 p-2">
-                  {brands.map((brand) => (
-                    <ListItem
-                      key={brand}
-                      title={brand}
-                      href={`/brand/${brand}`}
-                      className="text-sm p-1 hover:underline hover:underline-offset-2 font-sans"
-                    >
-                      {brand}
-                    </ListItem>
-                  ))}
-                </ul>
-              ) : (
-                <ul className="grid grid-cols-5 w-[1150px] gap-2 p-2">
-                  {group.groupProducts.map(({ product }) => (
+              <ul className="grid grid-cols-5 w-[1100px] gap-2 p-2">
+                  {group.groupProducts.map(({ product }: { product: Product }) => (
                     <ListItem
                       key={product.id}
                       title={product.name}
-                      href={`/product/${product.id}`}
-                      className="col-span-1 p-1 "
+                      href={`/product/view/${product.id}`}
+                      className="flex justify-start items-center gap-1 items-center bg-gradient-to-r from-slate-300 to-slate-500 p-[2px] rounded-md shadow-lg"
                     >
-                      <div className="flex items-center gap-2">
                         <CsImage
                           src={product.image_uris[0]}
                           alt={product.name}
                           width={64}
                           height={64}
-                          className="rounded-md"
+                          className="rounded-md m-1"
                         />
-                        <div className="grid grid-rows-2">
-                          <div className="text-sm font-medium leading-none tracking-tighter text-xs hover:underline hover:underline-offset-2">
-                            {product.name}
-                          </div>
-                          <p className="text-sm text-muted-foreground">
-                            {new Intl.NumberFormat("en-IN", {
+                        <div className=" flex flex-col justify-center items-around gap-1">
+                          <span className="text-xs">
+                            Name: {product.name}
+                          </span>
+                          <span  className="text-xs">
+                            Price: {new Intl.NumberFormat("en-IN", {
                               style: "currency",
                               currency: "INR",
                               minimumFractionDigits: 2,
                               maximumFractionDigits: 2,
                             }).format(product.pricing[0].price)}
-                          </p>
+                          </span>
+                          <span className="text-xs">
+                            Unit: {product.unit}
+                          </span>
+                          <span className="text-xs">
+                            Brand: {product.brand}
+                          </span>
                         </div>
-                      </div>
                     </ListItem>
                   ))}
-                </ul>
-              )}
+                  </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
         ))}

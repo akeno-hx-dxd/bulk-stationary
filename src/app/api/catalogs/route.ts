@@ -41,6 +41,13 @@ export const POST = async (request: NextRequest) => {
                         product: { connect: { id: productId } }
                     }))
                 }
+            },
+            include: {
+                catalogProducts:{
+                    include: {
+                        product: true
+                    }
+                }
             }
         });
 

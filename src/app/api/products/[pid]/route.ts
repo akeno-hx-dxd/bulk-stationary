@@ -41,64 +41,48 @@ export const POST = async (request: NextRequest, { params }: { params: { pid: st
             return NextResponse.json({ success: false, error: "Incomplete data provided" }, { status: 400 });
         }
 
-        // Fetch the existing product to compare the URIs
+        // Fetch the existing product to compare image URIs
         const existingProduct = await Prisma.product.findUnique({ where: { id: pid } });
         if (!existingProduct) {
             return NextResponse.json({ success: false, error: "Invalid product ID" }, { status: 400 });
         }
 
-        // If the URIs are changing, delete the old images from Cloudinary
+        // Delete old images from Cloudinary if URIs are changing
         await compareAndDeleteImages(existingProduct.image_uris, image_uris);
 
-        // Update the product
-        const updatedProduct = await Prisma.product.update({
-            where: { id: pid },
-            data: {
-                name,
-                image_uris,
-                descriptions,
-                pricing,
-                unit,
-                brand,
-            },
+        // Use a transaction to update product details and manage associations with groups and catalogs
+        const updatedProduct = await Prisma.$transaction(async (prisma) => {
+            // Update product details
+            const product = await prisma.product.update({
+                where: { id: pid },
+                data: {
+                    name,
+                    image_uris,
+                    descriptions,
+                    pricing,
+                    unit,
+                    brand,
+                },
+            });
+
+            // Update group associations
+            await prisma.groupProduct?.deleteMany({ where: { productId: pid } });
+            await Promise.all(groupIds?.map((groupId: string) => {
+                return prisma.groupProduct.create({
+                    data: { productId: pid, groupId }
+                });
+            }));
+
+            // Update catalog associations
+            await prisma.catalogProduct?.deleteMany({ where: { productId: pid } });
+            await Promise.all(catalogIds?.map((catalogId: string) => {
+                return prisma.catalogProduct.create({
+                    data: { productId: pid, catalogId }
+                });
+            }));
+
+            return product;
         });
-
-        if (!updatedProduct) {
-            return NextResponse.json({ success: false, error: "Failed to update product" }, { status: 400 });
-        }
-
-        // Update product associations with groups and catalogs
-        if (groupIds) {
-            // Remove current associations
-            await Prisma.groupProduct.deleteMany({
-                where: { productId: pid },
-            });
-            // Create new associations
-            await Promise.all(groupIds.map((groupId: string) => {
-                return Prisma.groupProduct.create({
-                    data: {
-                        productId: pid,
-                        groupId: groupId
-                    }
-                });
-            }));
-        }
-
-        if (catalogIds) {
-            // Remove current associations
-            await Prisma.catalogProduct.deleteMany({
-                where: { productId: pid },
-            });
-            // Create new associations
-            await Promise.all(catalogIds.map((catalogId: string) => {
-                return Prisma.catalogProduct.create({
-                    data: {
-                        productId: pid,
-                        catalogId: catalogId
-                    }
-                });
-            }));
-        }
 
         return NextResponse.json({ success: true, product: updatedProduct });
     } catch (err: any) {

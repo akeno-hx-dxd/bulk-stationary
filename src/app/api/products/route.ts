@@ -32,13 +32,16 @@ export const GET = async () => {
 // POST: Create a new product with pricing and relations
 export const POST = async (request: NextRequest) => {
     try {
-        const { name, image_uris, unit, descriptions, pricing, brand, catalogIds, groupIds } = await request.json();
+        const { name, image_uris, unit, descriptions, pricing, brand, catalogs, groups } = await request.json();
         
         // Validate required fields
         if (!name || !unit || !descriptions || !pricing || !brand) {
             return NextResponse.json({ success: false, error: "Incomplete data" }, { status: 400 });
         }
-        
+        const existingProduct = await Prisma.product.findUnique({ where: { name } });
+        if (existingProduct) {
+            return NextResponse.json({ success: false, error: "Product already exists" }, { status: 400 });
+        }
         const product = await Prisma.product.create({
             data: {
                 name,
@@ -48,12 +51,12 @@ export const POST = async (request: NextRequest) => {
                 pricing,
                 brand,
                 catalogProducts: {
-                    create: catalogIds?.map((catalogId: string) => ({
+                    create: catalogs?.map((catalogId: string) => ({
                         catalog: { connect: { id: catalogId } }
                     }))
                 },
                 groupProducts: {
-                    create: groupIds?.map((groupId: string) => ({
+                    create: groups?.map((groupId: string) => ({
                         group: { connect: { id: groupId } }
                     }))
                 }

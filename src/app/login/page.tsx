@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { BackButton } from '@/components/BackButton';
+import  BackButton  from '@/components/BackButton';
 import { useRouter } from 'next/navigation';
 export default function Login() {
     const [key, setKey] = useState<string>('');

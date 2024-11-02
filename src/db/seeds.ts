@@ -33,7 +33,7 @@ const main = async () => {
         },
         { 
             name: "Copy Gold A4 Paper", 
-            image_uris: ["cld-sample-2", "cld-sample-3", "cld-sample-4"],
+            image_uris: ["cld-sample-2", "cld-sample-3", "cld-sample"],
             unit: "bundle",
             descriptions: [
                 "High-quality paper for office and home printing.",
@@ -54,7 +54,7 @@ const main = async () => {
     for (let i = 3; i <= 20; i++) {
         productsData.push({
             name: `Sample Product ${i}`,
-            image_uris: [`cld-sample-${i % 4}`],
+            image_uris: [`cld-sample-${i % 2+2}`],
             unit: "item",
             descriptions: [
                 `Sample description for product ${i}.`,
