@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run prisma:generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "seeds": "tsx ./src/db/seeds.ts"
+    "seeds": "tsx ./src/db/seeds.ts",
+    "prisma:generate": "npx prisma generate --schema=./src/db/prisma/schema.prisma"
   },
   "dependencies": {
     "@prisma/client": "^5.20.0",
