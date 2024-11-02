@@ -4,11 +4,10 @@ import "dotenv/config";
 export const POST = async (request: NextRequest) => {
   try {
     const { key } = await request.json();
-
     // Validate the key
     if (!key || key !== process.env.ADMIN_KEY) {
       return NextResponse.json(
-        { success: false, error: "Invalid auth key" },
+        { success: false, error: "Invalid auth key", key: key },
         { status: 403 }
       );
     }
